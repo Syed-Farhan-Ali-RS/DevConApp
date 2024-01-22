@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
+const User = require('../../models/User');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 // @route   POST api/users
@@ -28,7 +29,9 @@ router.post(
       // See if user Exists
       let user = await User.findOne({ email });
       if (user) {
-        res.status(400).json({ errors: [{ msg: 'User Already Exists' }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'User Already Exists' }] });
       }
       // Get users Gravatar
 
@@ -51,7 +54,7 @@ router.post(
 
       // Return jsonwebtoken
 
-      res.send('User Route');
+      return res.send('User Registered');
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server Error');
